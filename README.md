@@ -42,7 +42,7 @@ canonicalize the extra `/` character and references to the `/./` and `/..` in pa
 
 ### Path Normalization
 
-If the `resolve` argument is set to `false`, the `pathname` will be normalized according to the following rules.
+The `pathname` will be normalized according to the following rules.
 
 - If `pathname` starts with a `/`, the resolved path string will start with `/`.
 - If a separator `/` is consecutive, it will be one.
