@@ -14,9 +14,8 @@ function testcase.realpath_resolve()
     end
 
     -- test that perform normalization before resolve pathname
-    local pathname, err, eno = realpath('./foo/../bar/../realpath_test.lua/', {
-        normalize = true,
-    })
+    local pathname, err, eno = realpath('./foo/../bar/../realpath_test.lua/',
+                                        true)
     assert.match(pathname, 'lua%-realpath/test/realpath_test%.lua$', false)
     assert.is_nil(err)
     assert.is_nil(eno)
@@ -195,9 +194,7 @@ function testcase.realpath_normalize()
             "../../def",
         },
     }) do
-        local pathname = assert(realpath(v[1], {
-            resolve = false,
-        }))
+        local pathname = assert(realpath(v[1], nil, false))
         -- print(string.format('#%02d: %-2s | %-38s | %-12s | %s', _,
         --                     pathname == v[2] and '' or 'NG', v[1], pathname,
         --                     v[2]))
@@ -205,9 +202,8 @@ function testcase.realpath_normalize()
     end
 
     -- test that return error if pathname is invalid string
-    local pathname, err, eno = realpath('foo/bar' .. string.char(0) .. '/baz', {
-        resolve = false,
-    })
+    local pathname, err, eno = realpath('foo/bar' .. string.char(0) .. '/baz',
+                                        nil, false)
     assert.is_nil(pathname);
     assert.is_string(err)
     assert.equal(errno[eno], errno.EILSEQ)
