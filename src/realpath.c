@@ -157,24 +157,10 @@ static int realpath_lua(lua_State *L)
 {
     size_t len       = 0;
     const char *path = lauxh_checklstring(L, 1, &len);
-    int resolve      = 1;
-    int normalize    = 0;
+    int normalize    = lauxh_optboolean(L, 2, 0);
+    int resolve      = lauxh_optboolean(L, 3, 1);
 
-    // check options
-    if (!lua_isnoneornil(L, 2)) {
-        lauxh_checktable(L, 2);
-        lua_settop(L, 2);
-
-        lua_getfield(L, 2, "resolve");
-        resolve = lauxh_optboolean(L, -1, resolve);
-        lua_pop(L, 1);
-
-        lua_getfield(L, 2, "normalize");
-        normalize = lauxh_optboolean(L, -1, normalize);
-        lua_pop(L, 1);
-    }
     lua_settop(L, 1);
-
     // perform normalization only
     if (!resolve) {
         return normalize_lua(L, (char *)path, len);

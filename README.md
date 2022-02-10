@@ -15,23 +15,20 @@ luarocks install realpath
 
 ```lua
 local realpath = require('realpath')
-local pathname = assert(realpath('/foo/../bar/./../tmp', {
-    normalize = true,
-}))
+local pathname = assert(realpath('/foo/../bar/./../tmp', true))
 print(pathname) -- /tmp
 ```
 
 
-## pathname, err, errno = realpath( pathname [, opts] )
+## pathname, err, errno = realpath( pathname [, normalize [, resolve]] )
 
 canonicalize the extra `/` character and references to the `/./` and `/..` in pathnames and resolve them to abosolute pathname.
 
 **Parameters**
 
 - `pathname:string`: pathname string.
-- `opts:table`
-  - `resolve:boolean`:  if set to `false`, only normalization will be performed. (default: `true`)
-  - `normalize:boolean`: if both the `normalize` and `resolve` options are set to `true`, normalization will be performed before resolving the path string. (default: `false`)
+- `normalize:boolean`: if set to `true`, normalization will be performed before resolving the path string. (default: `false`)
+- `resolve:boolean`: if set to `false`, only normalization will be performed. (default: `true`)
 
 **Returns**
 
