@@ -1,6 +1,7 @@
 # lua-realpath
 
 [![test](https://github.com/mah0x211/lua-realpath/actions/workflows/test.yml/badge.svg)](https://github.com/mah0x211/lua-realpath/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/mah0x211/lua-realpath/branch/master/graph/badge.svg)](https://codecov.io/gh/mah0x211/lua-realpath)
 
 canonicalize the pathname.
 
