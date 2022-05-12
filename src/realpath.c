@@ -122,7 +122,7 @@ ADD_SEGMENT:
     if (p != tail) {
         lua_pushnil(L);
         errno = EILSEQ;
-        lua_errno_new(L, errno, "fstat");
+        lua_errno_new(L, errno, "normalize");
         return 2;
     }
 
