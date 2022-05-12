@@ -1,33 +1,31 @@
-local testcase = require('testcase')
+local assert = require('assert')
 local errno = require('errno')
 local realpath = require('realpath')
 
-function testcase.realpath_resolve()
+local function test_realpath_resolve()
     -- test that resolve pathname
     for v, match in pairs({
-        ['.'] = 'lua%-realpath/test$',
-        ['..'] = 'lua%-realpath$',
-        ['./realpath_test.lua'] = 'lua%-realpath/test/realpath_test%.lua$',
+        ['.'] = 'lua%-realpath$',
+        ['./test/..'] = 'lua%-realpath$',
+        ['./test/realpath_test.lua'] = 'lua%-realpath/test/realpath_test%.lua$',
     }) do
         local pathname = assert(realpath(v))
         assert.match(pathname, match, false)
     end
 
     -- test that perform normalization before resolve pathname
-    local pathname, err, eno = realpath('./foo/../bar/../realpath_test.lua/',
-                                        true)
+    local pathname, err = realpath('./foo/../bar/../test/realpath_test.lua/',
+                                   true)
     assert.match(pathname, 'lua%-realpath/test/realpath_test%.lua$', false)
     assert.is_nil(err)
-    assert.is_nil(eno)
 
     -- test that returns error
-    pathname, err, eno = realpath('./foo/../bar/../realpath_test.lua/')
+    pathname, err = realpath('./foo/../bar/../realpath_test.lua/')
     assert.is_nil(pathname)
-    assert.is_string(err)
-    assert.equal(errno[eno], errno.ENOENT)
+    assert.equal(err.type, errno.ENOENT)
 end
 
-function testcase.realpath_normalize()
+local function test_realpath_normalize()
     -- test that peform normalize only
     -- NOTE: this test cases copied from
     --  https://github.com/golang/go/blob/go1.17.7/src/path/filepath/path_test.go#L26
@@ -202,9 +200,11 @@ function testcase.realpath_normalize()
     end
 
     -- test that return error if pathname is invalid string
-    local pathname, err, eno = realpath('foo/bar' .. string.char(0) .. '/baz',
-                                        nil, false)
+    local pathname, err = realpath('foo/bar' .. string.char(0) .. '/baz', nil,
+                                   false)
     assert.is_nil(pathname);
-    assert.is_string(err)
-    assert.equal(errno[eno], errno.EILSEQ)
+    assert.equal(err.type, errno.EILSEQ)
 end
+
+test_realpath_resolve()
+test_realpath_normalize()
