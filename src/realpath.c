@@ -22,12 +22,13 @@
 
 #include <errno.h>
 #include <fcntl.h>
-#include <lauxhlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+// lua
+#include <lua_errno.h>
 
 static size_t REALPATH_BUFSIZ = PATH_MAX;
 static char *REALPATH_BUF     = NULL;
@@ -120,9 +121,9 @@ ADD_SEGMENT:
     // found NULL before the end of the string
     if (p != tail) {
         lua_pushnil(L);
-        lua_pushstring(L, strerror(EILSEQ));
-        lua_pushinteger(L, EILSEQ);
-        return 3;
+        errno = EILSEQ;
+        lua_errno_new(L, errno, "fstat");
+        return 2;
     }
 
     // add last-segment
@@ -185,15 +186,15 @@ static int realpath_lua(lua_State *L)
 
     // got error
     lua_pushnil(L);
-    lua_pushstring(L, strerror(errno));
-    lua_pushinteger(L, errno);
-
-    return 3;
+    lua_errno_new(L, errno, "realpath");
+    return 2;
 }
 
 LUALIB_API int luaopen_realpath(lua_State *L)
 {
     long pathmax = pathconf(".", _PC_PATH_MAX);
+
+    lua_errno_loadlib(L);
 
     // set the maximum number of bytes in a pathname
     if (pathmax != -1) {

@@ -20,8 +20,12 @@ local pathname = assert(realpath('/foo/../bar/./../tmp', true))
 print(pathname) -- /tmp
 ```
 
+## Error Handling
 
-## pathname, err, errno = realpath( pathname [, normalize [, resolve]] )
+the following functions return the `error` object created by https://github.com/mah0x211/lua-errno module.
+
+
+## pathname, err = realpath( pathname [, normalize [, resolve]] )
 
 canonicalize the extra `/` character and references to the `/./` and `/..` in pathnames and resolve them to abosolute pathname.
 
@@ -34,8 +38,7 @@ canonicalize the extra `/` character and references to the `/./` and `/..` in pa
 **Returns**
 
 - `pathname:string`: canonicalized pathname string.
-- `err:string`: error message on failure.
-- `errno:integer`: error number.
+- `err:error`: error object on failure.
 
 
 ### Path Normalization
