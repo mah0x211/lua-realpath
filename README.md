@@ -48,7 +48,5 @@ The `pathname` will be normalized according to the following rules.
 - If `pathname` starts with a `/`, the resolved path string will start with `/`.
 - If a separator `/` is consecutive, it will be one.
 - If a path segment is a `.`, it will be ignored.
-- If a path segment is a `..`;
-  - If the previous segment is not exist or is equal to `/` and `.`, it will be added.
-  - Otherwise, it will be ignored and the previous segment will be deleted.
+- If a path segment is a `..`, it will be ignored and the previous segment will be deleted.
 - The trailing-slash will be deleted.
