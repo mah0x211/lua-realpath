@@ -17,15 +17,15 @@ dependencies = {
 build = {
     type = "make",
     build_variables = {
-        LIB_EXTENSION   = "$(LIB_EXTENSION)",
-        CFLAGS          = "$(CFLAGS)",
-        WARNINGS        = "-Wall -Wno-trigraphs -Wmissing-field-initializers -Wreturn-type -Wmissing-braces -Wparentheses -Wno-switch -Wunused-function -Wunused-label -Wunused-parameter -Wunused-variable -Wunused-value -Wuninitialized -Wunknown-pragmas -Wshadow -Wsign-compare",
-        CPPFLAGS        = "-I$(LUA_INCDIR)",
-        LDFLAGS         = "$(LIBFLAG)",
+        LIB_EXTENSION = "$(LIB_EXTENSION)",
+        CFLAGS = "$(CFLAGS)",
+        WARNINGS = "-Wall -Wno-trigraphs -Wmissing-field-initializers -Wreturn-type -Wmissing-braces -Wparentheses -Wno-switch -Wunused-function -Wunused-label -Wunused-parameter -Wunused-variable -Wunused-value -Wuninitialized -Wunknown-pragmas -Wshadow -Wsign-compare",
+        CPPFLAGS = "-I$(LUA_INCDIR)",
+        LDFLAGS = "$(LIBFLAG)",
         REALPATH_COVERAGE = "$(REALPATH_COVERAGE)",
     },
     install_variables = {
-        LIB_EXTENSION   = "$(LIB_EXTENSION)",
-        INST_LIBDIR     = "$(LIBDIR)",
-    }
+        LIB_EXTENSION = "$(LIB_EXTENSION)",
+        INST_LIBDIR = "$(LIBDIR)",
+    },
 }

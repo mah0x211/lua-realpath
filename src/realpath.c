@@ -63,39 +63,19 @@ ADD_SEGMENT:
         if (*p != '.') {
             break;
         }
+        // fallthrough
 
     case '.':
-        // foud '.' segment
         if (p[1] == '/' || p[1] == 0) {
+            // foud '.' segment
             p += 1;
-        }
-        // found '..' segment
-        else if (p[1] == '.' && (p[2] == '/' || p[2] == 0)) {
+        } else if (p[1] == '.' && (p[2] == '/' || p[2] == 0)) {
+            // found '..' segment
             p += 2;
-            switch (top) {
-            case 1:
-                // remove previous segment if it is not slash
-                if (*lua_tostring(th, 1) != '/') {
-                    lua_settop(th, 0);
-                    top = 0;
-                }
-                break;
-
-            default:
+            if (top > 1) {
                 // remove previous segment with trailing-slash
-                if (top > 1 && strcmp(lua_tostring(th, -2), "..") != 0) {
-                    lua_pop(th, 2);
-                    top -= 2;
-                    break;
-                }
-
-            case 0:
-                // add '..' segment
-                luaL_checkstack(th, 2, NULL);
-                lua_pushliteral(th, "..");
-                lua_pushliteral(th, "/");
-                top += 2;
-                break;
+                lua_pop(th, 2);
+                top -= 2;
             }
         } else {
             // allow segments that started with '.' character

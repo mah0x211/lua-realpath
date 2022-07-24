@@ -49,19 +49,23 @@ local function test_realpath_normalize()
         },
         {
             "..",
-            "..",
+            ".",
         },
         {
             "../..",
-            "../..",
+            ".",
         },
         {
             "../../abc",
-            "../../abc",
+            "abc",
         },
         {
             "/abc",
             "/abc",
+        },
+        {
+            "../foo/.dot-file",
+            "foo/.dot-file",
         },
         {
             "/",
@@ -93,18 +97,18 @@ local function test_realpath_normalize()
         },
         {
             "../",
-            "..",
+            ".",
         },
         {
             "../../",
-            "../..",
+            ".",
         },
         {
             "/abc/",
             "/abc",
         },
 
-        -- Remove doubled slash
+        -- Remove multiple slashes
         {
             "abc//def//ghi",
             "abc/def/ghi",
@@ -126,7 +130,7 @@ local function test_realpath_normalize()
             "abc",
         },
 
-        -- Remove . elements
+        -- Remove . segments
         {
             "abc/./def",
             "abc/def",
@@ -140,7 +144,15 @@ local function test_realpath_normalize()
             "abc",
         },
 
-        -- Remove .. elements
+        -- Remove .. segments
+        {
+            "abc/..",
+            ".",
+        },
+        {
+            "/abc/..",
+            "/",
+        },
         {
             "abc/def/ghi/../jkl",
             "abc/def/jkl",
@@ -163,7 +175,7 @@ local function test_realpath_normalize()
         },
         {
             "abc/def/../../..",
-            "..",
+            ".",
         },
         {
             "/abc/def/../../..",
@@ -171,7 +183,7 @@ local function test_realpath_normalize()
         },
         {
             "abc/def/../../../ghi/jkl/../../../mno",
-            "../../mno",
+            "mno",
         },
         {
             "/../abc",
@@ -189,7 +201,7 @@ local function test_realpath_normalize()
         },
         {
             "abc/../../././../def",
-            "../../def",
+            "def",
         },
     }) do
         local pathname = assert(realpath(v[1], nil, false))
