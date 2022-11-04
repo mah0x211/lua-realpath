@@ -23,7 +23,7 @@ print(pathname) -- /tmp
 
 -- normalize a pathname
 local normalize = require('realpath.normalize')
-pathname = assert(realpath('/foo/../bar/./../unknown_pathname'))
+pathname = assert(normalize('/foo/../bar/./../unknown_pathname'))
 print(pathname) -- /unknown_pathname
 ```
 
