@@ -16,9 +16,17 @@ luarocks install realpath
 
 ```lua
 local realpath = require('realpath')
+
+-- normalize a pathname before resolving them
 local pathname = assert(realpath('/foo/../bar/./../tmp', true))
 print(pathname) -- /tmp
+
+-- normalize a pathname
+local normalize = require('realpath.normalize')
+pathname = assert(realpath('/foo/../bar/./../unknown_pathname'))
+print(pathname) -- /unknown_pathname
 ```
+
 
 ## Error Handling
 
@@ -39,6 +47,11 @@ canonicalize the extra `/` character and references to the `/./` and `/..` in pa
 
 - `pathname:string`: canonicalized pathname string.
 - `err:error`: error object on failure.
+
+
+## pathname, err = realpath.normalize( pathname )
+
+equivalent to `realpath( pathname, true, false )`.
 
 
 ### Path Normalization

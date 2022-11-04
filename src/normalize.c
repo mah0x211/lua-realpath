@@ -23,61 +23,18 @@
 // lua
 #include "lua_realpath.h"
 
-static size_t REALPATH_BUFSIZ = PATH_MAX;
-static char *REALPATH_BUF     = NULL;
-
-static int realpath_lua(lua_State *L)
+static int normalize_lua(lua_State *L)
 {
     size_t len       = 0;
     const char *path = lauxh_checklstring(L, 1, &len);
-    int normalize    = lauxh_optboolean(L, 2, 0);
-    int resolve      = lauxh_optboolean(L, 3, 1);
 
     lua_settop(L, 1);
-    // perform normalization only
-    if (!resolve) {
-        return lua_realpath_normalize(L, (char *)path, len);
-    }
-
-    // perform normalization before resolving the path
-    if (normalize) {
-        int rv = lua_realpath_normalize(L, (char *)path, len);
-        if (rv != 1) {
-            return rv;
-        }
-        path = lua_tostring(L, -1);
-    }
-
-    // perform path resolution
-    path = realpath(path, REALPATH_BUF);
-    lua_settop(L, 0);
-    if (path) {
-        lua_pushstring(L, path);
-        return 1;
-    }
-
-    // got error
-    lua_pushnil(L);
-    lua_errno_new(L, errno, "realpath");
-    return 2;
+    return lua_realpath_normalize(L, (char *)path, len);
 }
 
-LUALIB_API int luaopen_realpath(lua_State *L)
+LUALIB_API int luaopen_realpath_normalize(lua_State *L)
 {
-    long pathmax = pathconf(".", _PC_PATH_MAX);
-
     lua_errno_loadlib(L);
-
-    // set the maximum number of bytes in a pathname
-    if (pathmax != -1) {
-        REALPATH_BUFSIZ = pathmax;
-    }
-    // allocate the buffer for realpath
-    REALPATH_BUF = lua_newuserdata(L, REALPATH_BUFSIZ);
-    // holds until the state closes
-    luaL_ref(L, LUA_REGISTRYINDEX);
-
-    lua_pushcfunction(L, realpath_lua);
-
+    lua_pushcfunction(L, normalize_lua);
     return 1;
 }

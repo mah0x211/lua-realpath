@@ -1,6 +1,7 @@
 local assert = require('assert')
 local errno = require('errno')
 local realpath = require('realpath')
+local normalize = require('realpath.normalize')
 
 local function test_realpath_resolve()
     -- test that resolve pathname
@@ -18,6 +19,11 @@ local function test_realpath_resolve()
                                    true)
     assert.match(pathname, 'lua%-realpath/test/realpath_test%.lua$', false)
     assert.is_nil(err)
+
+    -- test that return error if cannot normalize pathname
+    pathname, err = realpath('foo/bar' .. string.char(0) .. '/baz', true)
+    assert.is_nil(pathname);
+    assert.equal(err.type, errno.EILSEQ)
 
     -- test that returns error
     pathname, err = realpath('./foo/../bar/../realpath_test.lua/')
@@ -209,11 +215,16 @@ local function test_realpath_normalize()
         --                     pathname == v[2] and '' or 'NG', v[1], pathname,
         --                     v[2]))
         assert.equal(pathname, v[2])
+        assert.equal(normalize(v[1]), pathname)
     end
 
     -- test that return error if pathname is invalid string
     local pathname, err = realpath('foo/bar' .. string.char(0) .. '/baz', nil,
                                    false)
+    assert.is_nil(pathname);
+    assert.equal(err.type, errno.EILSEQ)
+
+    pathname, err = normalize('foo/bar' .. string.char(0) .. '/baz', nil, false)
     assert.is_nil(pathname);
     assert.equal(err.type, errno.EILSEQ)
 end
