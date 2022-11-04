@@ -1,6 +1,8 @@
-TARGET=realpath.$(LIB_EXTENSION)
+MODULE=realpath
+TARGET=src/realpath.$(LIB_EXTENSION)
 SRCS=$(wildcard src/*.c)
-OBJS=$(SRCS:.c=.o)
+OBJS=$(SRCS:.c=.$(LIB_EXTENSION))
+GCDAS=$(OBJS:.$(LIB_EXTENSION)=.gcda)
 INSTALL?=install
 
 ifdef REALPATH_COVERAGE
@@ -9,15 +11,16 @@ endif
 
 .PHONY: all install
 
-all: $(TARGET)
+all: $(OBJS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(WARNINGS) $(COVFLAGS) $(CPPFLAGS) -o $@ -c $<
 
-$(TARGET): $(OBJS)
+%.$(LIB_EXTENSION): %.o
 	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS) $(PLATFORM_LDFLAGS) $(COVFLAGS)
 
-install:
+install: $(OBJS)
+	$(INSTALL) -d $(INST_LIBDIR)/$(MODULE)
 	$(INSTALL) $(TARGET) $(INST_LIBDIR)
-	rm -f ./src/*.o
-	rm -f ./src/*.so
+	$(INSTALL) $(filter-out $(TARGET), $(OBJS)) $(INST_LIBDIR)/$(MODULE)
+	rm -f $(OBJS) $(GCDAS)
