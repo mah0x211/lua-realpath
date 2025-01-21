@@ -22,6 +22,8 @@
 
 // lua
 #include "lua_realpath.h"
+// std
+#include <limits.h>
 
 static size_t REALPATH_BUFSIZ = PATH_MAX;
 static char *REALPATH_BUF     = NULL;
