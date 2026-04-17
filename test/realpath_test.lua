@@ -25,6 +25,11 @@ local function test_realpath_resolve()
     assert.is_nil(pathname);
     assert.equal(err.type, errno.EILSEQ)
 
+    -- test that return ENAMETOOLONG error
+    pathname, err = realpath(string.rep('x', 65536))
+    assert.is_nil(pathname)
+    assert.equal(err.type, errno.ENAMETOOLONG)
+
     -- test that returns error
     pathname, err = realpath('./foo/../bar/../realpath_test.lua/')
     assert.is_nil(pathname)
