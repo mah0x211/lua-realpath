@@ -20,11 +20,13 @@
  *  DEALINGS IN THE SOFTWARE.
  */
 
+// std
+#include <stdlib.h>
+#include <unistd.h>
 // lua
 #include "lua_realpath.h"
-// std
-#include <limits.h>
-#include <stdlib.h>
+// external headers
+#include "lauxhlib.h"
 
 #define REALPATH_GC_MT "realpath.gc"
 
@@ -148,9 +150,10 @@ LUALIB_API int luaopen_realpath(lua_State *L)
         lua_newuserdata(L, pathbuf_siz);
     } else {
         // _PC_PATH_MAX is indeterminate: realpath(3) will allocate dynamically
-        lua_pushinteger(L, 0); // upvalue 1: no size limit to check
-        lua_pushlightuserdata(
-            L, NULL); // upvalue 2: NULL signals dynamic allocation
+        // upvalue 1: no size limit to check
+        lua_pushinteger(L, 0);
+        // upvalue 2: NULL signals dynamic allocation
+        lua_pushlightuserdata(L, NULL);
     }
     lua_pushcclosure(L, realpath_lua, 2);
 

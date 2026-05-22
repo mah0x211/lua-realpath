@@ -22,6 +22,8 @@
 
 // lua
 #include "lua_realpath.h"
+// external headers
+#include "lauxhlib.h"
 
 static int normalize_lua(lua_State *L)
 {
