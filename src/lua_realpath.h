@@ -24,13 +24,11 @@
 #define lua_realpath_h
 
 #include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
+#include <stdint.h>
 // lua
+#include <lauxlib.h>
+#include <lua.h>
+// external headers
 #include <lua_errno.h>
 
 static inline int lua_realpath_normalize(lua_State *L, char *path, size_t len)
