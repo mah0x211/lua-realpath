@@ -33,7 +33,19 @@ build = {
         },
     },
     modules = {
-        ["realpath"] = "src/realpath.c",
-        ["realpath.normalize"] = "src/normalize.c",
+        ["realpath"] = {
+            sources = "src/realpath.c",
+            incdirs = {
+                "$(DEP_ERRNO_INCDIR)",
+                "$(DEP_LAUXHLIB_INCDIR)",
+            },
+        },
+        ["realpath.normalize"] = {
+            sources = "src/normalize.c",
+            incdirs = {
+                "$(DEP_ERRNO_INCDIR)",
+                "$(DEP_LAUXHLIB_INCDIR)",
+            },
+        },
     },
 }
