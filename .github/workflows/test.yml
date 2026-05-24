@@ -24,6 +24,9 @@ jobs:
         luacheck .
 
   test:
+    needs: luacheck
+    permissions:
+      id-token: write
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/mah0x211/lua-ci:latest
@@ -53,7 +56,6 @@ jobs:
     -
       name: Install Tools
       run: |
-        apt install lcov -y
         luarocks install assert
     -
       name: Run Test
@@ -65,8 +67,9 @@ jobs:
         sh ./covgen.sh
     -
       name: Upload C coverage to Codecov
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       with:
+        use_oidc: true
+        disable_search: true
         files: ./coverage/lcov.info
-        token: ${{ secrets.CODECOV_TOKEN }}
         flags: unittests
