@@ -20,13 +20,13 @@
  *  DEALINGS IN THE SOFTWARE.
  */
 
-// std
+// project
+#include "lua_realpath.h"
+// depend
+#include "lauxhlib.h"
+// system
 #include <stdlib.h>
 #include <unistd.h>
-// lua
-#include "lua_realpath.h"
-// external headers
-#include "lauxhlib.h"
 
 #define REALPATH_GC_MT "realpath.gc"
 

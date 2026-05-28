@@ -20,9 +20,9 @@
  *  DEALINGS IN THE SOFTWARE.
  */
 
-// lua
+// project
 #include "lua_realpath.h"
-// external headers
+// depend
 #include "lauxhlib.h"
 
 static int normalize_lua(lua_State *L)
